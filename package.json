@@ -1,0 +1,26 @@
+{
+  "name": "api-social-network",
+  "version": "1.0.0",
+  "description": "An API built using MongoDB and Mongoose",
+  "main": "sever.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KR1ISTIN/API-Social-Network.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KR1ISTIN/API-Social-Network/issues"
+  },
+  "homepage": "https://github.com/KR1ISTIN/API-Social-Network#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongodb": "^5.5.0",
+    "mongoose": "^7.2.1",
+    "nodemon": "^2.0.22"
+  }
+}
