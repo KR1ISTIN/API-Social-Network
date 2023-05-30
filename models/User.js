@@ -1,4 +1,4 @@
-const mongoose = require('mongoose'); 
+const {mongoose,Schema} = require('mongoose'); 
 
 // creating a schema to create a layout for each document
 const userSchema = new mongoose.Schema({
@@ -17,7 +17,6 @@ const userSchema = new mongoose.Schema({
 
     thoughts: [{ type: Schema.Types.ObjectId, ref: 'Thought' }],
     friends: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-    lastAccessed: { type: Date, default: Date.now },
   },
   {
     toJSON: {
@@ -33,7 +32,5 @@ userSchema.virtual('friendCount').get(function () {
 
 // creating a model with our schema
 const User = mongoose.model('User', userSchema);
-
-
 
 module.exports = User;

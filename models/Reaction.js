@@ -1,4 +1,5 @@
 const mongoose = require('mongoose'); 
+const Schema = require('mongoose'); 
 
 const reactionSchema = new mongoose.Schema({
     reactionId: {
@@ -17,9 +18,9 @@ const reactionSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now,
-        get: (date) => {
-            if (date) return date.ISOString().split('T')[0];
-        }
+        // get: (date) => {
+        //     if (date) return date.ISOString().split('T')[0];
+        // }
     }
 },
 {

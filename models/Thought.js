@@ -1,27 +1,27 @@
 const mongoose = require('mongoose'); 
-const reaction = require('./Reaction')
+const reactionSchema = require('./Reaction')
 
 // creating a schema to create a layout for each document
 const thoughtSchema = new mongoose.Schema({
     thoughtText: { 
         type: String, 
         required: true, 
-        manLength: 1,
+        minLength: 1,
         maxLength: 280  
     },
     createdAt: {
         type: Date, 
         default: Date.now,
-        get: (date) => {
-            if (date) return date.ISOString().split('T')[0];
-        }
+        // get: (date) => {
+        //     if (date) return date.ISOString().split('T')[0];
+        // }
     },
-    user: {
+    username: {
         type: String,
         required: true
     },
     reactions: 
-    [reaction]
+    [reactionSchema]
 },
 {
     timestamps: true,
@@ -38,5 +38,7 @@ thoughtSchema.virtual('reactionCount').get(function () {
 
 // creating a model with our schema
 const Thought = mongoose.model('Thought', thoughtSchema);
+
+
 
 module.exports = Thought;
