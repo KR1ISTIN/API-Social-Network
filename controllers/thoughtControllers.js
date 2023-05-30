@@ -24,13 +24,13 @@ module.exports ={
         }
       },
       // create a thought
-    async createThought(req, res) {
+      async createThought(req, res) {
         try {
           const thought = await Thought.create(req.body);
           const user = await User.findOneAndUpdate(
             { _id: req.body.userId },
             { $push: { thoughts: thought._id } }, // ref the thoughts column in users table
-            { new: true }
+            {runValidators: true, new: true}
           );
           if (!user) {
             return res
@@ -38,6 +38,24 @@ module.exports ={
               .json({ message: 'Thought created, but found no user with that ID' });
           }
           res.json(thought);
+        } catch (err) {
+          console.log(err);
+          res.status(500).json(err);
+        }
+      },
+      // update a thought 
+      async updateThought(req,res) {
+        try {
+          const thoughtUpdate = await Thought.findOneAndUpdate(
+            { _id: req.params.thoughtId },
+            { $set: req.body },
+            {runValidators: true, new: true}
+          );
+          if (!thoughtUpdate) {
+            return res.status(404).json({ message: 'No thought with this id!' });
+          }
+          console.log(req.body)
+          res.json(thoughtUpdate);
         } catch (err) {
           console.log(err);
           res.status(500).json(err);

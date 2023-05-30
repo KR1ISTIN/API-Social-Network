@@ -10,7 +10,7 @@ module.exports = {
             res.status(500).json(err);
         }
     },
-      // find A user
+    // find A user
     async findUser(req, res) {
       try {
         const findUser = await User.findOne({ _id: req.params.userId })
@@ -37,17 +37,15 @@ module.exports = {
     // update a user
     async updateUser(req,res) {
       try {
-        const userUpdate= await User.findOneAndUpdate(
+        const userUpdate = await User.findOneAndUpdate(
           { _id: req.params.userId },
           { $set: req.body },
-          {
-            runValidators: true,
-            new: true
-          }
+          {runValidators: true, new: true}
         );
         if (!userUpdate) {
           return res.status(404).json({ message: 'No user with this id!' });
         }
+        //console.log(req.body)
         res.json(userUpdate);
       } catch (err) {
         console.log(err);

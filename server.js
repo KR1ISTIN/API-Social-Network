@@ -5,10 +5,11 @@ const db = require('./config/connection');
 
 const app = express();
 const PORT = 3001;
-app.use(routes);
-app.use(express.json());
 // app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(routes);
+
 
 db.once('open', () => {
   app.listen(PORT, () => {
