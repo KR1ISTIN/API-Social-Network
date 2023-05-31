@@ -28,14 +28,15 @@ module.exports ={
         try {
           const thought = await Thought.create(req.body);
           const user = await User.findOneAndUpdate(
-            { _id: req.body.userId },
+            { username: req.body.username }, // find the username in the thought table that is equal to the username in the User table
             { $push: { thoughts: thought._id } }, // ref the thoughts column in users table
             {runValidators: true, new: true}
           );
+          console.log(user);
           if (!user) {
             return res
               .status(404)
-              .json({ message: 'Thought created, but found no user with that ID' });
+              .json({ message: 'Thought created, but no user found with that username' });
           }
           res.json(thought);
         } catch (err) {
