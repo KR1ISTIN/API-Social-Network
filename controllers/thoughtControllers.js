@@ -54,10 +54,33 @@ module.exports ={
           if (!thoughtUpdate) {
             return res.status(404).json({ message: 'No thought with this id!' });
           }
-          console.log(req.body)
+          //console.log(req.body)
           res.json(thoughtUpdate);
+
         } catch (err) {
           console.log(err);
+          res.status(500).json(err);
+        }
+      },
+      // delete a thought and remove it from assosicated user
+      async deleteThought(req, res) {
+        try {
+          const deleteThought = await Thought.findOneAndRemove({ _id: req.params.thoughtId });
+          if (!deleteThought) {
+            return res.status(404).json({ message: 'No thought with this id!' });
+          }
+    
+          const user = await User.findOneAndUpdate(
+            { thoughts: req.params.thoughtId },
+            { $pull: { thoughts: req.params.thoughtId } },
+            { new: true }
+          );
+    
+          if (!user) {
+            return res.status(404).json({ message: 'No user with this id!' });
+          }
+          res.json({ message: 'Thought successfully deleted!' });
+        } catch (err) {
           res.status(500).json(err);
         }
       },

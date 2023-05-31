@@ -9,6 +9,7 @@ const thoughts = [
     {
         thoughtText: 'Coding is fun',
         username: 'kristin1',
+        // subdocument
         reactions: [
             {
                 reactionBody: 'There are a ton of resources for it too',
