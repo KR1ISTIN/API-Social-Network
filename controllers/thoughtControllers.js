@@ -14,10 +14,11 @@ module.exports ={
       async findThought(req, res) {
         try {
           const oneThought = await Thought.findOne({ _id: req.params.thoughtId });
-    
+  
           if (!oneThought) {
             return res.status(404).json({ message: 'No thought with that ID' });
           }
+
           res.json(oneThought);
         } catch (err) {
           res.status(500).json(err)
@@ -28,7 +29,7 @@ module.exports ={
         try {
           const thought = await Thought.create(req.body);
           const user = await User.findOneAndUpdate(
-            { username: req.body.username }, // find the username in the thought table that is equal to the username in the User table
+            { username: req.body.username }, // find the username in the user table that is equal to the username in the req.body from thought model
             { $push: { thoughts: thought._id } }, // ref the thoughts column in users table
             {runValidators: true, new: true}
           );
@@ -72,17 +73,60 @@ module.exports ={
           }
     
           const user = await User.findOneAndUpdate(
-            { thoughts: req.params.thoughtId },
+            { thoughts: req.params.thoughtId },  // find the thoughts in the user table that is equal to req.params with the thoughtId that was passed
             { $pull: { thoughts: req.params.thoughtId } },
             { new: true }
           );
     
           if (!user) {
-            return res.status(404).json({ message: 'No user with this id!' });
+            return res.status(404).json({ message: 'Deleted thought, but no user with this id!' });
           }
           res.json({ message: 'Thought successfully deleted!' });
         } catch (err) {
           res.status(500).json(err);
         }
       },
+      // create a reaction
+      async createReaction(req, res) {
+        try {
+          //console.log(req.body)
+          const thoughts = await Thought.findOneAndUpdate(
+            { _id: req.params.thoughtId },//  find id based on the req.params Then ruhn line 95
+            { $push: { reactions: req.body }}, // push the req.body on the reactions array
+            {runValidators: true, new: true}
+          );
+          
+          if (!thoughts) {
+            return res
+              .status(404)
+              .json({ message: 'Reaction created, but not associated' });
+          }
+          res.json(thoughts);
+        } catch (err) {
+          console.log(err);
+          res.status(500).json(err);
+        }
+      },
+      // delete reaction
+      async deleteReaction(req, res) {
+        try {
+          //console.log(req.body)
+          const deleteReaction = await Thought.findOneAndUpdate(
+            { _id: req.params.thoughtId },
+            { $pull: { reactions: {reactions: req.params.reactionId} }}, 
+            
+          );
+          if (!deleteReaction) {
+            return res
+              .status(404)
+              .json({ message: 'Reaction deleted, but not associated with thought' });
+          }
+          
+          res.json(deleteReaction);
+        } catch (err) {
+          console.log(err);
+          res.status(500).json(err);
+        }
+      },
+     
 };
