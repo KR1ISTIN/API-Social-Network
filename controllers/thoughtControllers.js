@@ -90,18 +90,18 @@ module.exports ={
       async createReaction(req, res) {
         try {
           //console.log(req.body)
-          const thoughts = await Thought.findOneAndUpdate(
+          const createReaction = await Thought.findOneAndUpdate(
             { _id: req.params.thoughtId },//  find id based on the req.params Then ruhn line 95
             { $push: { reactions: req.body }}, // push the req.body on the reactions array
             {runValidators: true, new: true}
           );
           
-          if (!thoughts) {
+          if (!createReaction) {
             return res
               .status(404)
               .json({ message: 'Reaction created, but not associated' });
           }
-          res.json(thoughts);
+          res.json(createReaction);
         } catch (err) {
           console.log(err);
           res.status(500).json(err);
@@ -110,10 +110,10 @@ module.exports ={
       // delete reaction
       async deleteReaction(req, res) {
         try {
-          //console.log(req.body)
+          console.log(req.params.reactionId)
           const deleteReaction = await Thought.findOneAndUpdate(
             { _id: req.params.thoughtId },
-            { $pull: { reactions: {reactions: req.params.reactionId} }}, 
+            { $pull: { reactions: {reactionId: req.params.reactionId }}}, 
             
           );
           if (!deleteReaction) {
@@ -122,11 +122,10 @@ module.exports ={
               .json({ message: 'Reaction deleted, but not associated with thought' });
           }
           
-          res.json(deleteReaction);
+          res.json({message: 'Reaction has been deleted'});
         } catch (err) {
           console.log(err);
           res.status(500).json(err);
         }
       },
-     
 };

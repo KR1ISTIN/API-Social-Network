@@ -16,7 +16,7 @@ module.exports = {
         const findUser = await User.findOne({ _id: req.params.userId })
           .select('-__v')
           .populate('thoughts')
-          //.populate('friends');
+          .populate('friends'._id);
         if (!findUser) {
           return res.status(404).json({ message: 'No user with that ID' });
         }
@@ -37,6 +37,7 @@ module.exports = {
     },
     // update a user
     async updateUser(req,res) {
+   
       try {
         const userUpdate = await User.findOneAndUpdate(
           { _id: req.params.userId },
@@ -46,12 +47,14 @@ module.exports = {
         if (!userUpdate) {
           return res.status(404).json({ message: 'No user with this id!' });
         }
-        let newUsername = req.body.username
+        //let newUsername = req.body.username
+       
         //console.log(newUsername);
-        // update Thought Model on username when user updates their username
-          await Thought.updateMany(
-            {$set: {username: newUsername}}
-        );
+        // TRYING to update Thought Model on username when user updates their username
+          // await Thought.findOneAndUpdate(
+          
+          //   {$set: {username: newUsername}}
+          // )
         res.json(userUpdate);
       } catch (err) {
         console.log(err);
@@ -70,6 +73,49 @@ module.exports = {
         res.json({ message: 'User and associated thoughts were deleted!' })
 
       } catch (err) {
+        console.error()
+        res.status(500).json(err);
+      }
+    },
+    // create a friend
+    async newFriend(req, res) {
+      try {
+        console.log(req.body)
+        const newFriend = await User.findOneAndUpdate(
+          { _id: req.params.userId },
+          { $push: { friends: req.body._id}},
+          {runValidators: true, new: true}
+        );
+        
+        if (!newFriend) {
+          return res
+            .status(404)
+            .json({ message: 'no friend found' });
+        }
+        res.json(newFriend);
+      } catch (err) {
+        console.log(err);
+        res.status(500).json({message: 'an error has occured'});
+      }
+    },
+    // delete a friend
+    async deleteFriend(req, res) {
+      try {
+        console.log(req.params.friendId)
+        const deleteFriend = await User.findOneAndUpdate(
+          { _id: req.params.userId },
+          { $pull: { friends: req.params.friendId }}, 
+          
+        );
+        if (!deleteFriend) {
+          return res
+            .status(404)
+            .json({ message: 'friend deleted, but not associated with user' });
+        }
+        
+        res.json({message: 'The friend has been successfully deleted'});
+      } catch (err) {
+        console.log(err);
         res.status(500).json(err);
       }
     },
