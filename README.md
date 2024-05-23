@@ -2,7 +2,7 @@
 An API built using MongoDB and Mongoose
 
 ## Description
-API Social Network was created to gain knowledge and understanding how MongoDB and Mongoose works to create a backend API with using a NoSql database. I learned how create controllers and models with MongoDB instead of MYSql syntax. This project allows you to create a user, a thought associated with that user and a reaction by another user. You are also able to update and delete a user and thoughts connected to the user. I look forward to gaining further knowledge in using a NoSql database in my future projects. 
+API Social Network was created to gain knowledge and understanding how to implement a ODM with Mongoose when working with a NoSQL database. This project allows you to create a user, a thought associated with that user and a reaction by another user. You are also able to update and delete a user and thoughts connected to the user. 
 
 ## Table of Contents 
 Click below to navigate to corresponding sections
